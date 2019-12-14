@@ -1,0 +1,44 @@
+@charset 'UTF-8';
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #fff;
+  overflow-x: hidden;
+  color: #333;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.base {
+  width: 100vw;
+  height: 100vh;
+  background-color: dimgrey;
+  position: relative;
+}
+
+.tab-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 75vw;
+  height: 70vh;
+}
+
+.action-button {
+  color: gray;
+}
+
+.action-button:hover {
+  color: blue;
+  cursor: pointer;
+}
