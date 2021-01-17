@@ -1,77 +1,83 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Form, Input, Button } from "antd";
-import PropTypes from "prop-types";
-import { createUser, isLoading, createTodo } from "./reducer";
-//var dateFormat = require("dateformat");
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Form, Input, Button } from 'antd';
+import PropTypes from 'prop-types';
+import { createUser, isLoading, createTodo } from './reducer';
 
-//let timer = null;
+const delay = async (duration = 1000) => {
+  await new Promise((resolve) => setTimeout(resolve, duration));
+  return undefined;
+};
 
 class Create extends Component {
-  handleSubmit = e => {
+  handleSubmit = (e) => {
+    const {
+      form: { validateFields },
+      dispatch,
+      type,
+    } = this.props;
     e.preventDefault();
-    this.props.form.validateFields(async (err, values) => {
+
+    validateFields(async (err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
+        console.log('Received values of form: ', values);
       }
-      this.props.dispatch(isLoading(true));
-      await this.delay(2000);
-      if (this.props.type === "users") {
-        this.props.dispatch(createUser(values));
+      dispatch(isLoading(true));
+      await delay(2000);
+      if (type === 'users') {
+        dispatch(createUser(values));
       } else {
-        let todo = {
+        const todo = {
           todoAction: values.action,
-          dateAdded: values.date
+          dateAdded: values.date,
         };
-        this.props.dispatch(createTodo(todo));
+        dispatch(createTodo(todo));
       }
-      this.props.dispatch(isLoading(false));
+      dispatch(isLoading(false));
     });
   };
 
-  async delay(duration = 1000) {
-    await new Promise(resolve => setTimeout(resolve, duration));
-    return;
-  }
-
   render() {
-    const { getFieldDecorator } = this.props.form;
-    //const { type } = this.props;
+    const {
+      form: { getFieldDecorator },
+      type,
+    } = this.props;
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit} className="login-form">
-          {this.props.type === "users" && (
+          {type === 'users' && (
             <div>
               <Form.Item label="Name">
-                {getFieldDecorator("name", {
+                {getFieldDecorator('name', {
                   rules: [
-                    { required: true, message: "Please input your name!" }
-                  ]
+                    { required: true, message: 'Please input your name!' },
+                  ],
                 })(<Input placeholder="Name" />)}
               </Form.Item>
               <Form.Item label="Email">
-                {getFieldDecorator("email", {
+                {getFieldDecorator('email', {
                   rules: [
-                    { required: true, message: "Please input your email!" }
-                  ]
+                    { required: true, message: 'Please input your email!' },
+                  ],
                 })(<Input placeholder="Email" />)}
               </Form.Item>
             </div>
           )}
-          {this.props.type === "todos" && (
+          {type === 'todos' && (
             <div>
               <Form.Item label="Action">
-                {getFieldDecorator("action", {
+                {getFieldDecorator('action', {
                   rules: [
-                    { required: true, message: "Please input your action!" }
-                  ]
+                    { required: true, message: 'Please input your action!' },
+                  ],
                 })(<Input placeholder="Action" />)}
               </Form.Item>
               <Form.Item label="Date">
-                {getFieldDecorator("date", {
+                {getFieldDecorator('date', {
                   rules: [
-                    { required: true, message: "Please input your date!" }
-                  ]
+                    { required: true, message: 'Please input your date!' },
+                  ],
                 })(<Input placeholder="Date" />)}
               </Form.Item>
             </div>
@@ -92,9 +98,13 @@ class Create extends Component {
 }
 
 Create.propTypes = {
-  type: PropTypes.oneOf(["users", "todos"])
+  type: PropTypes.oneOf(['users', 'todos']),
 };
 
-const WrappedCreate = Form.create({ name: "create" })(Create);
+Create.defaultProps = {
+  type: 'users',
+};
+
+const WrappedCreate = Form.create({ name: 'create' })(Create);
 
 export default connect()(WrappedCreate);
