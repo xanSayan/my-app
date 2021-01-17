@@ -20,7 +20,7 @@ body {
 .base {
   width: 100vw;
   height: 100vh;
-  background-color: dimgrey;
+  background-color: orange;
   position: relative;
 }
 
